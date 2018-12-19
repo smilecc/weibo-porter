@@ -1,0 +1,23 @@
+{
+  "name": "ts-porter",
+  "version": "1.0.0",
+  "main": "src/main.ts",
+  "author": "smilec",
+  "license": "MIT",
+  "scripts": {
+    "start": "ts-node src/main.ts"
+  },
+  "dependencies": {
+    "@types/node": "^10.12.17",
+    "axios": "^0.18.0",
+    "selenium-webdriver": "^4.0.0-alpha.1",
+    "tedis": "^0.1.4",
+    "ts-node": "^7.0.1",
+    "tslint": "^5.12.0",
+    "typescript": "^3.2.2"
+  },
+  "devDependencies": {
+    "@types/selenium-webdriver": "^3.0.14",
+    "uuid": "^3.3.2"
+  }
+}
