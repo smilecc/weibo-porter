@@ -22,8 +22,12 @@ export class BilibiliService extends Service {
       }
       await this.createLock();
       this.printLog('正在检查动态');
-      await this.getDynamics(uid, newDynamicHandler);
-      this.printLog('动态完毕');
+      try {
+        await this.getDynamics(uid, newDynamicHandler);
+        this.printLog('动态完毕');
+      } catch (error) {
+        this.printLog('出现异常：' + error.message);
+      }
       await this.removeLock();
     }, Config.bilibili.checkCycle * 1000)
   }
