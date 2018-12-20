@@ -74,13 +74,10 @@ export class WeiboService extends Service {
     const driver = this.getDriver();
     await driver.get('https://m.weibo.cn/?jumpfrom=weibocom&sudaref=login.sina.com.cn');
 
-    await driver.sleep(2 * 1000);
-    await driver.executeScript('window.localStorage.clear()');
     await driver.findElement(By.className('lite-iconf-releas')).click();
 
     // 等待界面加载完毕
     const textarea = await driver.wait(until.elementLocated(By.xpath('//*[@id="app"]/div[1]/div/main/div[1]/div/span/textarea[1]')), 20 * 1000);
-
     content = content.replace(/@/g, '&');
     content = content.replace(/`/g, "'");
 
