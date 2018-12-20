@@ -5,11 +5,13 @@
   "author": "smilec",
   "license": "MIT",
   "scripts": {
-    "start": "ts-node src/main.ts"
+    "start": "ts-node app.ts"
   },
   "dependencies": {
+    "@types/download": "^6.2.3",
     "@types/node": "^10.12.17",
     "axios": "^0.18.0",
+    "download": "^7.1.0",
     "selenium-webdriver": "^4.0.0-alpha.1",
     "tedis": "^0.1.4",
     "ts-node": "^7.0.1",

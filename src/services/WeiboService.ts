@@ -1,5 +1,5 @@
 import { Service } from "./Service";
-import { IWebDriverOptionsCookie, By, until } from 'selenium-webdriver';
+import { IWebDriverOptionsCookie, By, until, Key } from 'selenium-webdriver';
 import * as fs from 'fs';
 
 export class WeiboService extends Service {
@@ -79,17 +79,27 @@ export class WeiboService extends Service {
     // 等待界面加载完毕
     const textarea = await driver.wait(until.elementLocated(By.xpath('//*[@id="app"]/div[1]/div/main/div[1]/div/span/textarea[1]')), 20 * 1000);
 
+    content = content.replace(/@/g, '&');
+    content = content.replace(/`/g, "'");
+
     // 设置要发布的内容
-    await textarea.sendKeys(content);
+    driver.executeScript(`
+      var textarea = document.querySelector('#app > div.m-wrapper.m-wbox > div > main > div.m-box-model.m-pos-r > div > span > textarea:nth-child(1)');
+      textarea.value = \`${content}\`;
+    `);
+
+    await textarea.sendKeys(' ');
+    await textarea.sendKeys(Key.BACK_SPACE);
     await driver.sleep(1000);
 
     // 上传图片
     const uploadInput = await driver.findElement(By.id('selectphoto'));
     for (const imgPath of imgList) {
       await uploadInput.sendKeys(imgPath);
-      await driver.sleep(1000);
+      await driver.sleep(1500);
     }
 
     await driver.sleep(2000);
+    await driver.findElement(By.className('m-send-btn')).click();
   }
 }
