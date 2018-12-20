@@ -74,6 +74,7 @@ export class WeiboService extends Service {
     const driver = this.getDriver();
     await driver.get('https://m.weibo.cn/?jumpfrom=weibocom&sudaref=login.sina.com.cn');
 
+    await driver.sleep(2 * 1000);
     await driver.executeScript('window.localStorage.clear()');
     await driver.findElement(By.className('lite-iconf-releas')).click();
 
