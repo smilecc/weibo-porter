@@ -1,5 +1,6 @@
 import { Service } from "./Service";
 import { IWebDriverOptionsCookie, By, until, Key } from 'selenium-webdriver';
+import { Config } from '../config';
 import * as fs from 'fs';
 
 export class WeiboService extends Service {
@@ -92,14 +93,16 @@ export class WeiboService extends Service {
     await textarea.sendKeys(Key.BACK_SPACE);
     await driver.sleep(1000);
 
-    // 上传图片
-    const uploadInput = await driver.findElement(By.id('selectphoto'));
-    for (const imgPath of imgList) {
-      await uploadInput.sendKeys(imgPath);
-      await driver.sleep(1500);
-    }
+    if (!Config.weibo.stopSend) {
+      // 上传图片
+      const uploadInput = await driver.findElement(By.id('selectphoto'));
+      for (const imgPath of imgList) {
+        await uploadInput.sendKeys(imgPath);
+        await driver.sleep(1500);
+      }
 
-    await driver.sleep(2000);
-    await driver.findElement(By.className('m-send-btn')).click();
+      await driver.sleep(2000);
+      await driver.findElement(By.className('m-send-btn')).click();
+    }
   }
 }
