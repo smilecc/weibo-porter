@@ -4,4 +4,7 @@ export const Config = {
     password: '',
     stopSend: false,
   },
+  bilibili: {
+    checkCycle: 30,
+  },
 }

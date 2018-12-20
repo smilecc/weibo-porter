@@ -5,6 +5,7 @@ import { RedisUtil } from '../utils/Redis';
 import { Builder, until, By } from 'selenium-webdriver';
 import * as fs from 'fs';
 import { DownloaderUtil } from '../utils/Downloader';
+import { Config } from '../config';
 
 
 export class BilibiliService extends Service {
@@ -24,7 +25,7 @@ export class BilibiliService extends Service {
       await this.getDynamics(uid, newDynamicHandler);
       this.printLog('动态完毕');
       await this.removeLock();
-    }, 10 * 1000)
+    }, Config.bilibili.checkCycle * 1000)
   }
 
   public async getDynamics(uid: number, newDynamicHandler: DynamicHandler): Promise<void> {
