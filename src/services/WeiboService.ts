@@ -13,7 +13,7 @@ export class WeiboService extends Service {
   public async login(username: string, password: string, cookieSavePath: string) {
     const driver = this.getDriver();
     await driver.get('https://m.weibo.cn/?jumpfrom=weibocom&sudaref=login.sina.com.cn');
-    await driver.findElement(By.className('lite-iconf-releas')).click();
+    await driver.wait(until.elementLocated(By.className('lite-iconf-releas'))).click();
 
     // 等待登录页面加载
     await driver.wait(until.titleContains('登录'), 20 * 1000);
@@ -74,7 +74,7 @@ export class WeiboService extends Service {
     const driver = this.getDriver();
     await driver.get('https://m.weibo.cn/?jumpfrom=weibocom&sudaref=login.sina.com.cn');
 
-    await driver.findElement(By.className('lite-iconf-releas')).click();
+    await driver.wait(until.elementLocated(By.className('lite-iconf-releas'))).click();
 
     // 等待界面加载完毕
     const textarea = await driver.wait(until.elementLocated(By.xpath('//*[@id="app"]/div[1]/div/main/div[1]/div/span/textarea[1]')), 20 * 1000);
