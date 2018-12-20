@@ -34,6 +34,9 @@ export async function main() {
 
     // 开始监听动态
     services.bilibiliService.startListenDynamic(81976, async (dynamic) => {
+      if (Config.weibo.stopSend) {
+        return;
+      }
       // 处理动态的图片
       let localImgList: string[] = [];
       // 如果是转发 则把原博截图
@@ -52,9 +55,7 @@ export async function main() {
         fs.unlinkSync(imgPath);
       }
       // 防抖
-      if (!Config.weibo.stopSend) {
-        await driver.sleep(20 * 1000);
-      }
+      await driver.sleep(20 * 1000);
     });
   } finally {
     // driver.quit();
