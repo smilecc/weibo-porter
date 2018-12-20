@@ -1,5 +1,5 @@
 import { Builder } from 'selenium-webdriver';
-import * as chrome from 'selenium-webdriver/chrome';
+import * as firefox from 'selenium-webdriver/firefox';
 import { getServices } from './services';
 import { DownloaderUtil } from './utils/Downloader';
 import * as fs from 'fs';
@@ -10,8 +10,8 @@ const CookiesCachePath = './cache/weibo.json';
 export async function main() {
   // 构建浏览器驱动器
   let driver = await new Builder()
-    .forBrowser('chrome')
-    .setChromeOptions(new chrome.Options().headless())
+    .forBrowser('firefox')
+    .setFirefoxOptions(new firefox.Options().headless())
     .build();
   // 构建本地服务
   const services = getServices(driver);

@@ -1,7 +1,8 @@
 import { Service } from './Service';
+import * as chrome from 'selenium-webdriver/chrome';
 import axios from 'axios';
 import { RedisUtil } from '../utils/Redis';
-import { until, By } from 'selenium-webdriver';
+import { Builder, until, By } from 'selenium-webdriver';
 import * as fs from 'fs';
 import { DownloaderUtil } from '../utils/Downloader';
 
@@ -12,7 +13,8 @@ export class BilibiliService extends Service {
    * @param uid 要监听的用户ID
    * @param newDynamicHandler 当监听到新动态时的处理器
    */
-  public startListenDynamic(uid: number, newDynamicHandler: DynamicHandler) {
+  public async startListenDynamic(uid: number, newDynamicHandler: DynamicHandler) {
+    await this.removeLock();
     setInterval(async () => {
       if (await this.checkLock()) {
         return;
@@ -86,10 +88,13 @@ export class BilibiliService extends Service {
   }
 
   public async takeScreenshot(dynamic: ILocalDynamic): Promise<string> {
-    const driver = this.getDriver();
+    const driver = await new Builder()
+      .forBrowser('chrome')
+      .setChromeOptions(new chrome.Options().headless().addArguments('window-size=1980,1080'))
+      .build();
     await driver.get(`https://t.bilibili.com/${dynamic.dynamicId}`);
     await driver.wait(until.elementLocated(By.className('main-content')));
-    await driver.sleep(3 * 1000);
+    await driver.sleep(2 * 1000);
 
     await driver.executeScript(`
       var forwAreaList = document.getElementsByClassName('forw-area');

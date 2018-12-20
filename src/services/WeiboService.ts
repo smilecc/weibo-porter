@@ -82,9 +82,13 @@ export class WeiboService extends Service {
     content = content.replace(/`/g, "'");
 
     // 设置要发布的内容
-    driver.executeScript(`
+    await driver.executeScript(`
       var textarea = document.querySelector('#app > div.m-wrapper.m-wbox > div > main > div.m-box-model.m-pos-r > div > span > textarea:nth-child(1)');
       textarea.value = \`${content}\`;
+
+      var fileInput = document.getElementById('selectphoto');
+      fileInput.style.display = 'block';
+      fileInput.style.opacity = 1;
     `);
 
     await textarea.sendKeys(' ');
@@ -100,6 +104,7 @@ export class WeiboService extends Service {
       }
 
       await driver.sleep(2000);
+      // await fs.writeFileSync('./temp/debug.png', await driver.takeScreenshot(), 'base64');
       await driver.findElement(By.className('m-send-btn')).click();
     }
   }
