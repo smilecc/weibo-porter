@@ -52,7 +52,9 @@ export async function main() {
         fs.unlinkSync(imgPath);
       }
       // 防抖
-      await driver.sleep(20 * 1000);
+      if (!Config.weibo.stopSend) {
+        await driver.sleep(20 * 1000);
+      }
     });
   } finally {
     // driver.quit();
