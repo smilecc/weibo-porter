@@ -107,6 +107,7 @@ export class BilibiliService extends Service {
     const imgData = await driver.findElement(By.className('detail-card')).takeScreenshot(true);
     const savePath = `${DownloaderUtil.getTempPath()}/screenshot_${dynamic.id}.png`;
     await fs.writeFileSync(savePath, imgData, 'base64');
+    await driver.quit();
     return savePath;
   }
 
