@@ -58,7 +58,7 @@ export class BilibiliService extends Service {
             title: '',
             content: dynamic.item.content,
             imgs: [],
-            timestamp: dynamic.item.timestamp,
+            timestamp: card.desc.timestamp,
             hasOrigin: 'origin' in dynamic,
           })
         } else if ('description' in dynamic.item) {
@@ -69,7 +69,7 @@ export class BilibiliService extends Service {
             title: dynamic.item.title,
             content: dynamic.item.description,
             imgs: dynamic.item.pictures ? dynamic.item.pictures.map((pic) => ({ src: pic.img_src })) : [],
-            timestamp: dynamic.item.upload_time,
+            timestamp: card.desc.timestamp,
             hasOrigin: false,
           })
         }
@@ -81,7 +81,7 @@ export class BilibiliService extends Service {
       for (const dynamic of dynamicList) {
         const redisSetKey: string = `bBo_${uid}`;
         const idCount = await redisClient.sismember(redisSetKey, dynamic.id);
-        if (idCount === 0) {
+        if (dynamic.timestamp > Config.bilibili.beforeTimestamp && idCount === 0) {
           this.printLog(`新动态：${dynamic.content}`);
           await newDynamicHandler(dynamic);
           await redisClient.sadd(redisSetKey, dynamic.id);
@@ -149,6 +149,7 @@ export interface IBilibiliDynamicResponse {
       desc: {
         uid: number;
         dynamic_id: string;
+        timestamp: number;
       },
       card: string;
     }[]

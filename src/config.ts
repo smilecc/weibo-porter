@@ -6,5 +6,6 @@ export const Config = {
   },
   bilibili: {
     checkCycle: 30,
+    beforeTimestamp: 1545383129,
   },
 }
