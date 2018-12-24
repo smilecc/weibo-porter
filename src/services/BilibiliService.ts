@@ -6,6 +6,7 @@ import { Builder, until, By } from 'selenium-webdriver';
 import * as fs from 'fs';
 import { DownloaderUtil } from '../utils/Downloader';
 import { Config } from '../config';
+import { ProxyUtil } from '../utils/Proxy';
 
 
 export class BilibiliService extends Service {
@@ -33,6 +34,10 @@ export class BilibiliService extends Service {
   }
 
   public async getDynamics(uid: number, newDynamicHandler: DynamicHandler): Promise<void> {
+    // 获取代理
+    const proxy = await ProxyUtil.getHttpProxy(this.getDriver());
+    this.printLog(`使用代理[${proxy.ip}:${proxy.port}]`);
+    // 加载动态
     let response = await axios.get(`http://api.vc.bilibili.com/dynamic_svr/v1/dynamic_svr/space_history?visitor_uid=927290&host_uid=${uid}`, {
       transformResponse: (data) => {
         return JSON.parse((data as string).replace(/"dynamic_id":(\d+?),/g, (content) => {
@@ -41,8 +46,8 @@ export class BilibiliService extends Service {
       },
       responseType: 'json',
       proxy: {
-        host: '121.40.138.161',
-        port: 8000,
+        host: proxy.ip,
+        port: proxy.port,
       }
     });
     let responseData: IBilibiliDynamicResponse = response.data;
@@ -79,6 +84,8 @@ export class BilibiliService extends Service {
         }
       }
 
+      this.printLog(`请求[${uid}]动态成功，共获得${dynamicList.length}条动态 code:${responseData.code}`);
+
       const redisClient = await RedisUtil.getRedis();
 
       // 分析是否有新动态
@@ -94,7 +101,7 @@ export class BilibiliService extends Service {
       }
       redisClient.close();
     } else {
-      throw new Error('请求Bilibili API失败');
+      throw new Error(`请求Bilibili API失败 code:${responseData.code}`);
     }
   }
 
