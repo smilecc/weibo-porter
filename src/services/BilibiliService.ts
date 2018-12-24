@@ -40,6 +40,10 @@ export class BilibiliService extends Service {
         }));
       },
       responseType: 'json',
+      proxy: {
+        host: '121.40.138.161',
+        port: 8000,
+      }
     });
     let responseData: IBilibiliDynamicResponse = response.data;
     let dynamicList: ILocalDynamic[] = [];
