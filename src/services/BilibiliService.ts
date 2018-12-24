@@ -1,6 +1,6 @@
 import { Service } from './Service';
 import * as chrome from 'selenium-webdriver/chrome';
-import axios from 'axios';
+import axios, { AxiosResponse } from 'axios';
 import { RedisUtil } from '../utils/Redis';
 import { Builder, until, By } from 'selenium-webdriver';
 import * as fs from 'fs';
@@ -38,7 +38,17 @@ export class BilibiliService extends Service {
     const proxy = await ProxyUtil.getHttpProxy(this.getDriver());
     this.printLog(`使用代理[${proxy.ip}:${proxy.port}]`);
     // 加载动态
-    let response = await axios.get(`http://api.vc.bilibili.com/dynamic_svr/v1/dynamic_svr/space_history?visitor_uid=${Math.ceil(Math.random() * 987789)}&host_uid=${uid}`, {
+    const axiosSource = axios.CancelToken.source();
+    const timeout = 20 * 1000;
+    let response: AxiosResponse<any> = null;
+    // 超时处理
+    setTimeout(() => {
+      if (response === null) {
+        axiosSource.cancel();
+      }
+    }, timeout);
+    // 请求
+    response = await axios.get(`http://api.vc.bilibili.com/dynamic_svr/v1/dynamic_svr/space_history?visitor_uid=${Math.ceil(Math.random() * 987789)}&host_uid=${uid}`, {
       transformResponse: (data) => {
         return JSON.parse((data as string).replace(/"dynamic_id":(\d+?),/g, (content) => {
           return content.replace(/([\d]+)/g, (id) => `"${id}"`);
@@ -49,7 +59,8 @@ export class BilibiliService extends Service {
         host: proxy.ip,
         port: proxy.port,
       },
-      timeout: 20 * 1000,
+      timeout,
+      cancelToken: axiosSource.token,
     });
     let responseData: IBilibiliDynamicResponse = response.data;
     let dynamicList: ILocalDynamic[] = [];
