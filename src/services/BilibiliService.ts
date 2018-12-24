@@ -25,7 +25,7 @@ export class BilibiliService extends Service {
       this.printLog('正在检查动态');
       try {
         await this.getDynamics(uid, newDynamicHandler);
-        this.printLog('动态完毕');
+        this.printLog('检查动态完毕');
       } catch (error) {
         this.printLog('出现异常：' + error.message);
       }
@@ -48,7 +48,8 @@ export class BilibiliService extends Service {
       proxy: {
         host: proxy.ip,
         port: proxy.port,
-      }
+      },
+      timeout: 20 * 1000,
     });
     let responseData: IBilibiliDynamicResponse = response.data;
     let dynamicList: ILocalDynamic[] = [];
