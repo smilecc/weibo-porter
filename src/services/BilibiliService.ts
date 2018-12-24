@@ -93,6 +93,8 @@ export class BilibiliService extends Service {
         }
       }
       redisClient.close();
+    } else {
+      throw new Error('请求Bilibili API失败');
     }
   }
 
