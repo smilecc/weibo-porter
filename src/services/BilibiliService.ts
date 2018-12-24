@@ -33,7 +33,7 @@ export class BilibiliService extends Service {
   }
 
   public async getDynamics(uid: number, newDynamicHandler: DynamicHandler): Promise<void> {
-    let response = await axios.get(`https://api.vc.bilibili.com/dynamic_svr/v1/dynamic_svr/space_history?visitor_uid=927290&host_uid=${uid}`, {
+    let response = await axios.get(`http://api.vc.bilibili.com/dynamic_svr/v1/dynamic_svr/space_history?visitor_uid=927290&host_uid=${uid}`, {
       transformResponse: (data) => {
         return JSON.parse((data as string).replace(/"dynamic_id":(\d+?),/g, (content) => {
           return content.replace(/([\d]+)/g, (id) => `"${id}"`);
