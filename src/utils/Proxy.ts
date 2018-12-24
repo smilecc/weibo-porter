@@ -51,7 +51,13 @@ export class ProxyUtil {
    * @param driver WebDriver
    */
   protected static async getNewProxy(driver: WebDriver): Promise<void> {
-    await driver.get(`https://www.xicidaili.com/nn/${Math.ceil(Math.random() * 3)}`);
+    const proxyList = [
+      'https://www.xicidaili.com/nn',
+      'https://www.xicidaili.com/nt/',
+      'https://www.xicidaili.com/wn/',
+      'https://www.xicidaili.com/wt/'
+    ];
+    await driver.get(proxyList[Math.ceil(Math.random() * (proxyList.length - 1))]);
     const ipListTable = await driver.wait(until.elementLocated(By.id('ip_list')));
     const trList = await ipListTable.findElements(By.tagName('tr'));
     const trListLength = trList.length;
