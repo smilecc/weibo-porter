@@ -100,7 +100,11 @@ export class WeiboService extends Service {
       const uploadInput = await driver.findElement(By.id('selectphoto'));
       for (const imgPath of imgList) {
         await uploadInput.sendKeys(imgPath);
-        await driver.sleep(1500);
+        await driver.wait(until.elementsLocated(By.className('m-rpic-close')), 100 * 1000);
+        await driver.executeScript(`
+          document.querySelector('.image-list').innerHTML = '';
+        `);
+        await driver.sleep(100);
       }
 
       await driver.sleep(2000);
