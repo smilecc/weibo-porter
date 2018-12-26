@@ -102,7 +102,7 @@ export class WeiboService extends Service {
         await uploadInput.sendKeys(imgPath);
         await driver.wait(until.elementsLocated(By.className('m-rpic-close')), 100 * 1000);
         await driver.executeScript(`
-          document.querySelector('.image-list').innerHTML = '';
+          document.querySelector('.image-wrap').remove();
         `);
         await driver.sleep(100);
       }
