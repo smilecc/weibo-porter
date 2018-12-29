@@ -39,8 +39,8 @@ export async function main() {
       }
       // 处理动态的图片
       let localImgList: string[] = [];
-      // 如果是转发 则把原博截图
-      if (dynamic.hasOrigin && dynamic.imgs.length < 9) {
+      // 如果原博图片数量小于9 把原博截图
+      if (dynamic.imgs.length < 9) {
         localImgList.push(await services.bilibiliService.takeScreenshot(dynamic));
       }
       // 处理图片列表
